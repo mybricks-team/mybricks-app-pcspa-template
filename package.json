@@ -65,7 +65,7 @@
   "appConfig": {
     "react": {
       "name": "mybricks-app-pcspa-template",
-      "description": "中后台类PC页面模版搭建",
+      "description": "用于PC页面或PC应用的模版，支持页面、业务逻辑扩展AI等各项能力",
       "version": "0.0.1",
       "mybricks": {
         "extName": "pc-page-template",
