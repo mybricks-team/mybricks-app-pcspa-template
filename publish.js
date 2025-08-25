@@ -9,7 +9,7 @@ const origin =
   args.find((a) => a.startsWith("--origin=")) ??
   "--origin=https://my.mybricks.world"
 
-const ClearFiles = ['mybricks-app-pcspa', 'mybricks-app-pcspa-vue2']
+const ClearFiles = ['mybricks-app-pcspa-template', 'mybricks-app-pcspa-vue2']
 
 const publishReactAppOffline = () => {
   return new Promise((resolve) => {

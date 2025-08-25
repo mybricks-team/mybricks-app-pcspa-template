@@ -241,7 +241,7 @@ export default function appConfig(
       "ctrl+s": [save],
     },
     plugins: [
-      ...connetorPlugins,
+      // ...connetorPlugins,
       notePlugin.default({
         user: ctx.user,
         onUpload: async (file: File) => {
@@ -305,7 +305,7 @@ export default function appConfig(
         onSearchUser: (keyword: string) => {
           return new Promise(async (resolve, reject) => {
             try {
-              const res = await searchUser(`api/pcpage/searchUser`, {
+              const res = await searchUser(`api/pc-page-template/searchUser`, {
                 keyword,
               });
               // @ts-ignore
@@ -327,19 +327,19 @@ export default function appConfig(
           });
         },
       }),
-      localePlugin({
-        defaultPackLink:
-          ctx?.appConfig?.localeConfig?.defaultI18nLink ||
-          "/mybricks-app-pcspa/public/i18n-example.json",
-        onPackLoad: ({ i18nLangContent }) => {
-          ctx.i18nLangContent = i18nLangContent;
-        },
-        onUsedIdChanged: ({ ids }) => {
-          ctx.i18nUsedIdList = ids;
-        },
-      }),
-      ...remotePlugins,
-      themePlugin.use({ sdk: appData }),
+      // localePlugin({
+      //   defaultPackLink:
+      //     ctx?.appConfig?.localeConfig?.defaultI18nLink ||
+      //     "/mybricks-app-pcspa/public/i18n-example.json",
+      //   onPackLoad: ({ i18nLangContent }) => {
+      //     ctx.i18nLangContent = i18nLangContent;
+      //   },
+      //   onUsedIdChanged: ({ ids }) => {
+      //     ctx.i18nUsedIdList = ids;
+      //   },
+      // }),
+      // ...remotePlugins,
+      // themePlugin.use({ sdk: appData }),
       ...(ctx.isPreview
         ? []
         : [
@@ -380,43 +380,43 @@ export default function appConfig(
                   message.error("回滚失败！");
                 }
               },
-              modalActiveExtends: [
-                {
-                  type: "publish",
-                  title: (
-                    <Tooltip
-                      color="white"
-                      title={
-                        <a
-                          target="_blank"
-                          href="https://docs.mybricks.world/docs/publish-integration/kjkj/"
-                        >
-                          使用说明
-                        </a>
-                      }
-                    >
-                      下载
-                    </Tooltip>
-                  ),
-                  onClick({ fileId, type: envType, version }) {
-                    const loadend = message.loading(
-                      `版本 ${version} 下载中...`,
-                      0
-                    );
-                    download(
-                      `api/pcpage/download-product/${fileId}/${envType}/${version}`
-                    ).finally(() => {
-                      loadend();
-                    });
-                  },
-                },
-              ],
+              // modalActiveExtends: [
+              //   {
+              //     type: "publish",
+              //     title: (
+              //       <Tooltip
+              //         color="white"
+              //         title={
+              //           <a
+              //             target="_blank"
+              //             href="https://docs.mybricks.world/docs/publish-integration/kjkj/"
+              //           >
+              //             使用说明
+              //           </a>
+              //         }
+              //       >
+              //         下载
+              //       </Tooltip>
+              //     ),
+              //     onClick({ fileId, type: envType, version }) {
+              //       const loadend = message.loading(
+              //         `版本 ${version} 下载中...`,
+              //         0
+              //       );
+              //       download(
+              //         `api/pcpage/download-product/${fileId}/${envType}/${version}`
+              //       ).finally(() => {
+              //         loadend();
+              //       });
+              //     },
+              //   },
+              // ],
             }),
           ]),
-      pluginToCode({
-        type: "spa",
-      }),
-      pluginDomain()
+      // pluginToCode({
+      //   type: "spa",
+      // }),
+      // pluginDomain()
     ],
     // ...(ctx.hasMaterialApp
     //   ? {
@@ -508,8 +508,8 @@ export default function appConfig(
       globalIO: {
         startWithSingleton: true,
       },
-      vars: {},
-      fx: {},
+      // vars: {},
+      // fx: {},
       useStrict: false,
       useExtendedInput: true, // 开启场景卡片的扩展输入
     },

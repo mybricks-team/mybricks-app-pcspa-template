@@ -1,7 +1,7 @@
 {
-  "name": "mybricks-app-pcspa",
+  "name": "mybricks-app-pcspa-template",
   "version": "1.0.0",
-  "description": "mybricks PC页面",
+  "description": "mybricks PC页面模板",
   "scripts": {
     "dev:react": "npm i && webpack serve --config ./packages/react/scripts/webpack.dev.js",
     "dev:vue2": "npm i && webpack serve --config ./packages/vue2/scripts/webpack.dev.js",

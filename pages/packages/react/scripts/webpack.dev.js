@@ -29,16 +29,10 @@ module.exports = merge(common, {
     proxy: [
       {
         context: [
-          '/api/pcpage/toCode',
-          '/api/pcpage/publish',
-          '/api/pcpage/upload',
-          '/api/pcpage/rollback',
-          '/api/pcpage/download-product',
-          '/api/pcpage/publishToCom',
-          '/api/pcpage/publishToComDownload',
+          '/api/pc-page-template/publish',
         ],
         // target: 'https://my.mybricks.world',
-        target: 'http://localhost:9002/mybricks-app-pcspa',
+        target: 'http://localhost:9002/',
         secure: false,
         changeOrigin: true,
       },

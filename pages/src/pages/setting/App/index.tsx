@@ -32,7 +32,7 @@ export default (props) => {
         <Collapse.Panel key={0} header="设计器">
           <ConfigDesigner {...configContext} />
         </Collapse.Panel>
-        {!isInGroup && (
+        {/* {!isInGroup && (
           <Collapse.Panel key={1} header="基础设置">
             <ConfigBase {...configContext} />
           </Collapse.Panel>
@@ -53,13 +53,6 @@ export default (props) => {
         <Collapse.Panel key={3} header="服务扩展">
           <ConfigServer {...configContext} />
         </Collapse.Panel>
-
-        {/* {!isInGroup && <Collapse.Panel key={1} header="基础设置">
-          <ConfigBase {...configContext} />
-        </Collapse.Panel>}
-        {!isInGroup && <Collapse.Panel key={2} header="服务扩展">
-          <ConfigServer {...configContext} />
-        </Collapse.Panel>} */}
         <Collapse.Panel key={4} header="发布环境">
           <ConfigEnv {...configContext} />
         </Collapse.Panel>
@@ -70,7 +63,7 @@ export default (props) => {
         )}
         <Collapse.Panel key={6} header="实验室">
           <ConfigFeature {...configContext} />
-        </Collapse.Panel>
+        </Collapse.Panel> */}
       </Collapse>
     </Spin>
   );

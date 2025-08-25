@@ -1,5 +1,5 @@
-# mybricks-app-pcspa
-SPA页面搭建应用
+# mybricks-app-pcspa-template
+SPA页面模板搭建应用
 
 ## dev
 启动react应用及服务

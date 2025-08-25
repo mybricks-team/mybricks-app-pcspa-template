@@ -9,7 +9,7 @@ const moment = require('moment')
 
 /** 打包别名 */
 const ALIAS_MAP = {
-  'mybricks-app-pcspa': 'mybricks-app-pcspa-react'
+  'mybricks-app-pcspa-template': 'mybricks-app-pcspa-template'
 }
 
 const zip = new JSZip();
@@ -43,7 +43,7 @@ const filterFileName = [
   'package-lock.json',
   'yarn.lock',
   'pages',
-  'mybricks-app-pcspa',
+  'mybricks-app-pcspa-template',
   '.idea',
   '.git',
   '.vscode',

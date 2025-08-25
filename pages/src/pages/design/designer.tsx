@@ -11,7 +11,6 @@ import { fAxios } from '../../services/http'
 import moment from 'moment'
 import { message, Modal, Tooltip } from 'antd'
 import API from '@mybricks/sdk-for-app/api'
-// import API from '../../../../../sdk-for-app/src/api'
 import { Locker, Toolbar } from '@mybricks/sdk-for-app/ui'
 import config from './app-configs/index'
 import { fetchPlugins, removeBadChar } from '../../utils'
@@ -65,7 +64,7 @@ const getAppSetting = async () => {
 
 export default function MyDesigner({ appData: originAppData }) {
   window.fileId = originAppData.fileId
-  window._disableSmartLayout = originAppData?.config?.['mybricks-app-pcspa']?.config?.feature?.disableSmartLayout; // 是否禁用智能布局
+  window._disableSmartLayout = originAppData?.config?.['mybricks-app-pcspa-template']?.config?.feature?.disableSmartLayout; // 是否禁用智能布局
 
   const appData = useMemo(() => {
     let data = { ...originAppData }
@@ -120,8 +119,6 @@ export default function MyDesigner({ appData: originAppData }) {
           ? EnumMode.ENV
           : EnumMode.DEFAULT
 
-    // const fileContent = appData.fileContent?.content
-
     return {
       isPreview,
       sdk: {
@@ -162,10 +159,6 @@ export default function MyDesigner({ appData: originAppData }) {
       debugMainProps: appData.fileContent?.content?.debugMainProps,
       hasPermissionFn: appData.fileContent?.content?.hasPermissionFn,
       debugHasPermissionFn: appData.fileContent?.content?.debugHasPermissionFn,
-      // useAutoPreviewImage:
-      //   typeof fileContent.useAutoPreviewImage === 'undefined'
-      //     ? true
-      //     : fileContent.useAutoPreviewImage,
       componentName: appData.fileContent.content.componentName,
       staticResourceToCDN: appData.fileContent.content.staticResourceToCDN,
       versionApi: null,
@@ -213,12 +206,6 @@ export default function MyDesigner({ appData: originAppData }) {
           if (content) {
             setSaveTip(`改动已保存-${moment(new Date()).format('HH:mm')}`)
           }
-
-          // if (!options?.skipMessage) {
-          //   console.log(
-          //     `保存接口耗时 ${(new Date().getTime() - httpStartTime) / 1000}s`
-          //   )
-          // }
 
           if (options?.saveType === 'import') {
             location.reload()
@@ -300,17 +287,6 @@ export default function MyDesigner({ appData: originAppData }) {
 
       setCtx((pre) => ({ ...pre, comlibs: newComlibs, hasAIComlib, latestComlibs }))
     }).finally(loadDesigner)
-    // getInitComLibs(appData)
-    //   .then(async ({ comlibs, latestComlibs }) => {
-    //     const newComlibs = ctx.debug
-    //       ? replaceComlib(comlibs, comlibDebugUtils.get())
-    //       : comlibs
-
-    //     const hasAIComlib = comlibs.some(lib => lib.namespace === 'mybricks.ai-comlib-pc');
-
-    //     setCtx((pre) => ({ ...pre, comlibs: newComlibs, hasAIComlib, latestComlibs }))
-    //   })
-    //   .finally(loadDesigner)
   }, [designer])
 
   useEffect(() => {
@@ -359,7 +335,6 @@ export default function MyDesigner({ appData: originAppData }) {
         notePlugin, themePlugin, httpPlugin
       })
     })
-    // console.log('应用数据:', appData)
   }, [])
 
   useEffect(() => {
@@ -461,14 +436,8 @@ export default function MyDesigner({ appData: originAppData }) {
 
       setSaveTip('正在保存中...')
 
-      // message.loading({
-      //   key: msgSaveKey,
-      //   content: '保存中..',
-      //   duration: 0,
-      // })
       //保存
       const json = designerRef.current?.dump()
-      // const canvasDom = designerRef.current?.geoView.canvasDom
 
       json.comlibs = ctx.comlibs
       json.debugQuery = ctx.debugQuery
@@ -485,7 +454,6 @@ export default function MyDesigner({ appData: originAppData }) {
       json.fontJS = ctx.fontJS
       json.pageHeader = ctx.pageHeader
       json.i18nLangContentType = ctx.i18nLangContentType
-      // json.useAutoPreviewImage = ctx.useAutoPreviewImage
 
       json.projectId = ctx.sdk.projectId
 
@@ -529,11 +497,6 @@ export default function MyDesigner({ appData: originAppData }) {
       }
 
       return res
-
-      // 保存缩略图
-      // if (ctx.useAutoPreviewImage) {
-      // saveFileImage(canvasDom, ctx.save)
-      // }
     },
     [isPreview, ctx]
   )
@@ -656,7 +619,6 @@ export default function MyDesigner({ appData: originAppData }) {
         const jsonParams = {
           ...curToJSON,
           configuration: {
-            // scripts: encodeURIComponent(scripts),
             comlibs: curComLibs,
             title: ctx.fileName,
             pageHeader: ctx.pageHeader,
@@ -754,6 +716,122 @@ export default function MyDesigner({ appData: originAppData }) {
     [appData, ctx]
   )
 
+  const publish2 = useCallback(() => {
+    if (publishingRef.current) {
+        return
+      }
+
+      publishingRef.current = true
+
+      setPublishLoading(true)
+
+      const close = message.loading({
+        key: 'publish',
+        content: '发布中...',
+        duration: 0,
+      })
+      return (async () => {
+        /** 先保存 */
+        const json = designerRef.current?.dump()
+
+        const i18nLangContent =
+          ctx.i18nLangContentType === 'full'
+            ? ctx.i18nLangContent
+            : i18nLangContentFilter(ctx.i18nLangContent, ctx.i18nUsedIdList)
+
+        json.comlibs = ctx.comlibs
+        json.debugQuery = ctx.debugQuery
+        json.debugMockConfig = ctx.debugMockConfig
+        json.executeEnv = ctx.executeEnv
+        json.MYBRICKS_HOST = ctx.MYBRICKS_HOST
+        json.envList = ctx.envList
+        json.debugMainProps = ctx.debugMainProps
+        json.hasPermissionFn = ctx.hasPermissionFn
+        json.debugHasPermissionFn = ctx.debugHasPermissionFn
+        json.componentName = ctx.componentName
+        json.staticResourceToCDN = ctx.staticResourceToCDN
+        json.projectId = ctx.sdk.projectId
+        json.i18nLangContent = i18nLangContent
+        json.i18nLangContentType = ctx.i18nLangContentType
+
+        json.pageHeader = ctx.pageHeader
+
+        await ctx.save(
+          { content: JSON.stringify(json), name: ctx.fileName },
+          { skipMessage: true }
+        )
+
+        const res: {
+          data?: any
+          code: number
+          message: string
+          errorDetailMessage?: string
+          comId?: string
+        } = await fAxios.post('/api/pc-page-template/publish', {
+          userId: ctx.user?.id,
+          fileId: ctx.fileId,
+          fileName: ctx.fileName,
+          json,
+        })
+
+        if (res.code === 1) {
+          close()
+          message.success({
+            key: 'publish',
+            content: '发布成功',
+            duration: 2,
+          })
+
+          designerRef.current?.switchActivity?.('@mybricks/plugins/version')
+          setTimeout(() => {
+            ctx?.versionApi?.switchAciveTab?.('publish', void 0)
+          }, 0)
+        } else {
+          close()
+
+          if (res.errorDetailMessage) {
+            Modal.confirm({
+              title: '详细报错信息',
+              width: 800,
+              okText: '确认',
+              onOk: () => {
+                designerRef.current.toplView?.focusCom?.(res.comId)
+              },
+              content: (
+                <div className={css.errorDetail}>
+                  <div className={css.message}>{res.message}</div>
+                  <pre>{res.errorDetailMessage}</pre>
+                </div>
+              ),
+              okCancel: false,
+            })
+          } else {
+            message.error({
+              content: res.message || '发布失败',
+              duration: 2,
+            })
+          }
+        }
+
+        setPublishLoading(false)
+
+        return res
+      })()
+        .catch((e) => {
+          console.error(e)
+          close()
+          message.error({
+            key: 'publish',
+            content: '网络错误，请稍后再试',
+            duration: 2,
+          })
+        })
+        .finally(() => {
+          publishingRef.current = false
+          setPublishLoading(false)
+        })
+  }, [appData, ctx])
+
   const publishAndDownload = async (publishConfig) => {
     const res = await publish(publishConfig)
     if (res && res.code === 1 && res.data?.pib_id) {
@@ -831,9 +909,6 @@ export default function MyDesigner({ appData: originAppData }) {
       debugQuery: ctx.debugQuery,
       debugMockConfig: ctx.debugMockConfig,
       directConnection: ctx.directConnection,
-      // executeEnv: ctx.executeEnv,
-      // MYBRICKS_HOST: ctx.MYBRICKS_HOST,
-      // envList: ctx.envList,
       debugMainProps: ctx.debugMainProps,
       hasPermissionFn: ctx.hasPermissionFn,
       debugHasPermissionFn: ctx.debugHasPermissionFn,
@@ -972,12 +1047,7 @@ export default function MyDesigner({ appData: originAppData }) {
               }}
               dotTip={beforeunload}
             />
-
-            {/* <Toolbar.Button disabled={isDebugMode} onClick={preview}>
-              预览
-            </Toolbar.Button> */}
-
-              <div
+              {/* <div
               data-mybricks-tip={`{content:'预览',position:'bottom'}`} 
               className={
                 classNames({
@@ -991,15 +1061,7 @@ export default function MyDesigner({ appData: originAppData }) {
                 preview()
                 }}>
               {preview_icon}
-              </div>
-
-            {/* <Toolbar.Button
-              disabled={!operable || isDebugMode}
-              loading={publishLoading}
-              onClick={() => setPublishModalVisible(true)}
-            >
-              发布
-            </Toolbar.Button> */}
+              </div> */}
 
               <div
               data-mybricks-tip={`{content:'发布',position:'bottom'}`} 
@@ -1012,7 +1074,8 @@ export default function MyDesigner({ appData: originAppData }) {
               onClick={() => {
                 if(!operable || isDebugMode) return
                 //在调试模式，不给点击
-                setPublishModalVisible(true)
+                // setPublishModalVisible(true)
+                publish2();
               }}>
                 {publish_icon}
               </div>
@@ -1081,14 +1144,6 @@ const genLazyloadComs = async (comlibs, toJSON) => {
         if (com?.deps && Array.isArray(com.deps)) {
           cloudDeps = [...cloudDeps, ...com.deps]
         }
-        // if (com?.title === '云组件依赖') {
-        //   cloudDeps = com.comAray.map((item) => {
-        //     return {
-        //       namespace: item.namespace,
-        //       verison: item.version,
-        //     }
-        //   })
-        // }
       })
     }
   })
@@ -1131,12 +1186,6 @@ const genLazyloadComs = async (comlibs, toJSON) => {
       ]
     })
   }
-
-  // if (toJSON.modules) {
-  //   Object.keys(toJSON.modules).forEach((key) => {
-  //     modulesDeps = [...modulesDeps, ...toJSON.modules[key].json.deps]
-  //   })
-  // }
 
   const scenesDeps = (toJSON.scenes || []).reduce(
     (pre, scene) => [...pre, ...scene.deps],
