@@ -339,7 +339,7 @@ export default function appConfig(
       //   },
       // }),
       // ...remotePlugins,
-      // themePlugin.use({ sdk: appData }),
+      themePlugin.use({ sdk: appData }),
       ...(ctx.isPreview
         ? []
         : [
