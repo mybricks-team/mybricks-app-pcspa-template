@@ -68,7 +68,7 @@
     "@mybricks/plugin-domain": "^0.0.12",
     "@mybricks/plugin-locale": "^1.0.6",
     "@mybricks/plugin-note": "^0.0.16",
-    "@mybricks/plugin-theme": "^0.0.55",
+    "@mybricks/plugin-theme": "^0.0.56-beta.1",
     "@mybricks/plugin-tocode": "^0.0.1-next.1",
     "@mybricks/plugin-tools": "1.0.17",
     "@mybricks/publish-to-com-sdk": "^1.0.0",
