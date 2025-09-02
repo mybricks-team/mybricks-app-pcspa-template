@@ -81,7 +81,7 @@ const DOMAIN_APP_NAMESPACE = "mybricks-domain";
 
 const isReact = APP_TYPE === "react";
 
-export default function appConfig(
+export default function appConfig({
   ctx,
   appData,
   save,
@@ -89,8 +89,9 @@ export default function appConfig(
   remotePlugins = [],
   fileDBRef,
   setBeforeunload,
-  builtPlugins
-) {
+  builtPlugins,
+  editorSettings
+}) {
   const envList = ctx.envList;
   // 获得环境信息映射表
   const envMap = [
@@ -517,7 +518,7 @@ export default function appConfig(
       model: ctx?.appConfig?.publishLocalizeConfig?.selectAIModel,
       designerRef
     }),
-    editView: editViewConfig({ ctx, envList }),
+    editView: editViewConfig({ ctx, envList, editorSettings }),
     com: {
       env: {
         // renderCom(json, opts, coms) {

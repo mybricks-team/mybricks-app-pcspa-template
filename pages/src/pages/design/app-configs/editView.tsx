@@ -25,7 +25,7 @@ const defaultPermissionFn = `export default function ({ key }) {
 }
 `
 
-export default function get({ctx, envList}) {
+export default function get({ctx, envList, editorSettings}) {
   const debugModeOptions =
     envList.length > 0
       ? [
@@ -49,24 +49,20 @@ export default function get({ctx, envList}) {
       return
     },
     items({}, cate0, cate1, cate2) {
-      cate0.title = `页面`
+      cate0.title = `模版`
       cate0.items = [
         {
-          title: '页面标题',
+          title: '标题',
           type: 'Text',
-          description: 'HTML文档的标题',
           options: {
             locale: true
           },
           value: {
             get: (context) => {
-              return ctx.pageHeader.title
+              return ctx.fileName
             },
             set: (context, v: any) => {
-              if (v?.id) {
-                v.zh_CN = ctx.i18nLangContent[v.id]?.content?.['zh-CN']
-              }
-              ctx.pageHeader.title = v
+              editorSettings.setFileName(v)
             },
           },
         },

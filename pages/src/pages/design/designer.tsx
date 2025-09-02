@@ -876,11 +876,14 @@ export default function MyDesigner({ appData: originAppData }) {
   const RenderLocker = useMemo(() => {
     return (
       <Locker
-        statusChange={(status) => {
+        statusChange={(params) => {
+          const { status } = params;
           setOperable(status === 1)
           ctx.operable = status === 1
         }}
         beforeToggleUnLock={beforeToggleUnLock}
+        enableInitialLockPrompt={true}
+        type={"spa"}
         compareVersion={true}
         autoLock={true}
       />
@@ -991,6 +994,8 @@ export default function MyDesigner({ appData: originAppData }) {
   // 上报页面的开发数据
   usePageStayTime({operable, appData: ctx, currentRef:designerRef})
 
+  const [fileName, setFileName] = useState(ctx.fileName);
+
   const TrueDesigner = useMemo(() => {
     return (
       SPADesigner &&
@@ -1000,8 +1005,8 @@ export default function MyDesigner({ appData: originAppData }) {
         <>
           <SPADesigner
             ref={designerRef}
-            config={config(
-              window?.mybricks?.createObservable(ctx),
+            config={config({
+              ctx: window?.mybricks?.createObservable(ctx),
               appData,
               save,
               designerRef,
@@ -1009,7 +1014,13 @@ export default function MyDesigner({ appData: originAppData }) {
               fileDBRef,
               setBeforeunload,
               builtPlugins,
-            )}
+              editorSettings: {
+                setFileName(fileName) {
+                  setFileName(fileName)
+                  ctx.fileName = fileName
+                }
+              }
+            })}
             onEdit={onEdit}
             onMessage={onMessage}
             onDebug={onDebug}
@@ -1026,7 +1037,7 @@ export default function MyDesigner({ appData: originAppData }) {
   return (
     <div className={`${css.view} fangzhou-theme`}>
       <Toolbar
-        title={ctx.fileName}
+        title={fileName}
         updateInfo={
           <Toolbar.LastUpdate
             content={saveTip}
