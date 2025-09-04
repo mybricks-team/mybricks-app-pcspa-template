@@ -15,6 +15,7 @@ export default class PcPageController {
     @Body("userId") userId: string,
     @Body("fileId") fileId: number,
     @Body("fileName") fileName: string,
+    @Body("icon") icon: string,
     @Body("json") json: any,
     @Req() req: any
   ) {
@@ -24,6 +25,7 @@ export default class PcPageController {
         userId,
         fileId,
         fileName,
+        icon,
         json
       })
       return {

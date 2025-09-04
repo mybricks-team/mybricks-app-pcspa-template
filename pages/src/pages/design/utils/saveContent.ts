@@ -211,7 +211,7 @@ const initialSaveFileContent = async (fileDBRef, ctx, saveType) => {
 
 const saveFileContentByIndexDB = async (item, ctx, fileDBRef, saveType) => {
   const json = item.data
-  const res = await ctx.save({ name: ctx.fileName, content: JSON.stringify(json) }, { saveType })
+  const res = await ctx.save({ name: ctx.fileName, icon: ctx.icon, content: JSON.stringify(json) }, { saveType })
 
   await fileDBRef.current.deleteByFileId(ctx.fileId)
 

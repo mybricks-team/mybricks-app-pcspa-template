@@ -66,6 +66,18 @@ export default function get({ctx, envList, editorSettings}) {
             },
           },
         },
+        {
+          title: "封面",
+          type: "ImageSelector",
+          value: {
+            get: () => {
+              return ctx.icon
+            },
+            set: (_, v) => {
+              ctx.icon = v
+            }
+          }
+        }
         // {
         //   title: '图标',
         //   type: 'ImageSelector',

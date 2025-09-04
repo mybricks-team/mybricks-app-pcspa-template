@@ -126,6 +126,7 @@ export default function MyDesigner({ appData: originAppData }) {
         openUrl: appData.openUrl,
       },
       user: appData.user,
+      icon: appData.fileContent?.icon,
       fileName: appData.fileContent?.name,
       pageHeader:
         appData.fileContent?.content?.pageHeader ||
@@ -605,7 +606,7 @@ export default function MyDesigner({ appData: originAppData }) {
         json.pageHeader = ctx.pageHeader
 
         await ctx.save(
-          { content: JSON.stringify(json), name: ctx.fileName },
+          { content: JSON.stringify(json), name: ctx.fileName, icon: ctx.icon },
           { skipMessage: true }
         )
 
@@ -757,7 +758,7 @@ export default function MyDesigner({ appData: originAppData }) {
         json.pageHeader = ctx.pageHeader
 
         await ctx.save(
-          { content: JSON.stringify(json), name: ctx.fileName },
+          { content: JSON.stringify(json), name: ctx.fileName, icon: ctx.icon },
           { skipMessage: true }
         )
 
@@ -771,6 +772,7 @@ export default function MyDesigner({ appData: originAppData }) {
           userId: ctx.user?.id,
           fileId: ctx.fileId,
           fileName: ctx.fileName,
+          icon: ctx.icon,
           json,
         })
 
